@@ -1,3 +1,5 @@
+/* Table: organization */
+
 create table organization (
 organization_id serial primary key,
 name varchar(150) not null,
@@ -6,12 +8,15 @@ contact_email varchar(250) not null,
 logo_filename varchar(250) not null
 )
 
+/* Insert sample organizations */
+
 insert into organization (name,description,contact_email,logo_filename)
 values
 ('BrightFuture Builders','A nonprofit focused on improving community infrastructure through sustainable construction projects','info@brightfuturebuilders.org','brightfuture-logo.png'),
 ('GreenHarvest Growers','An urban farming collective promoting food sustainability and education in local neighborhoods','contact@greenharvest.org','greenharvest-logo.png'),
 ('UnityServe Volunteers','A volunteer coordination group supporting local charities and service initiatives','hello@unityserve.org','unityserve-logo.png');
 
+/* Table: project */
 
 create table project (
 project_id serial primary key,
@@ -22,6 +27,8 @@ project_date date,
 organization_id integer not null,
 foreign key (organization_id) references organization(organization_id)
 );
+
+/* Insert sample projects for each organization */
 
 INSERT INTO project (project_title, project_description, project_location, project_date, organization_id)
 VALUES
@@ -89,3 +96,61 @@ VALUES
  'Annual 5K run and fundraising event bringing together volunteers, sponsors, and the community to raise funds for three local charities focused on food and shelter.',
  'City Central Park', '2027-09-28', 3);
  
+/* Table: category */
+
+ create table category(
+category_id serial primary key,
+category_name varchar (100) not null
+);
+
+/* Insert sample categories */
+
+INSERT INTO category (category_name) VALUES
+('Environmental'),
+('Education'),
+('Community Service'),
+('Health and Wellness');
+
+/* Table: project_category */
+
+create table project_category (
+category_id integer not null,
+project_id integer not null,
+primary key (category_id , project_id),
+foreign key (project_id) references project(project_id),
+foreign key (category_id) references category(category_id)
+);
+
+/* Insert project-category associations */
+
+INSERT INTO project_category (project_id, category_id) VALUES
+-- Community Bridge Restoration
+(1, 1), (1, 3),
+-- Solar-Powered Community Center
+(2, 1), (2, 3),
+-- Affordable Housing Initiative
+(3, 3),
+-- Public Park Revitalization
+(4, 1), (4, 3),
+-- School Infrastructure Upgrade
+(5, 2), (5, 3),
+-- Rooftop Urban Garden Launch
+(6, 1), (6, 4),
+-- School Garden Education Program
+(7, 2), (7, 1),
+-- Community Farmers Market
+(8, 3), (8, 4),
+-- Composting Network Expansion
+(9, 1),
+-- Hydroponic Training Workshop
+(10, 2), (10, 1),
+-- Winter Shelter Support Drive
+(11, 3), (11, 4),
+-- Senior Companion Program
+(12, 4), (12, 3),
+-- Youth Mentorship Initiative
+(13, 2), (13, 3),
+-- Community Clean-Up Campaign
+(14, 1), (14, 3),
+-- Charity Fundraising Marathon
+(15, 3), (15, 4);
