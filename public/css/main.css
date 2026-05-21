@@ -163,3 +163,8 @@ footer {
   color: var(--text-muted);
   font-size: 0.9rem;
 }
+
+body a {
+  color: inherit;
+  text-decoration: none;
+}
