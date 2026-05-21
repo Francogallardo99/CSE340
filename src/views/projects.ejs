@@ -4,7 +4,7 @@
         <ul>
             <% projects.forEach(project => { %>
                 <li>
-                    <strong><a href="/project/<%= project.project_id %>"><%= project.title %></a></strong>: <%= project.description %>
+                    <strong><a href="/project/<%= project.project_id %>"><%= project.title %></a></strong><%= project.description %>
                     <br>
                     Location: <%= project.location %>
                     <br>
