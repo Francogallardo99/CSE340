@@ -7,6 +7,18 @@
         
         <img src="/images/<%= organization.logo_filename %>" alt="Logo de <%= organization.name %>">
         
+        <h2>Projects in this organization:</h2>
+        <ul>
+            <% projects.forEach(project => { %>
+                <li>
+                    <strong><a href="/project/<%= project.project_id %>"><%= project.title %></a></strong><%= project.description %>
+                    <br>
+                    Location: <%= project.location %>
+                    <br>
+                    Date: <%= project.date %>
+                </li>
+            <% }); %>  
+        </ul>
         <br>
         <a href="/projects">Back to Projects</a> | <a href="/organizations">View all Organizations</a>
     </main>
