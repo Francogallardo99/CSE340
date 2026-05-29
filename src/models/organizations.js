@@ -50,4 +50,15 @@ const createOrganization = async (name, description, contactEmail, logoFilename)
     return result.rows[0].organization_id;
 };
 
-export { getAllOrganizations, getOrganizationDetails, createOrganization }
+const updateOrganization = async (id, name, description, contactEmail, logo) => {
+    const query = `
+        UPDATE organization
+        SET name = $2, description = $3, contact_email = $4, logo_filename = $5
+        WHERE organization_id = $1
+    `;
+
+    const queryParams = [id, name, description, contactEmail, logo];
+    await db.query(query, queryParams);
+};
+
+export { getAllOrganizations, getOrganizationDetails, createOrganization , updateOrganization}
