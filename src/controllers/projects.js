@@ -3,6 +3,39 @@ import { getAllProjects } from '../models/projects.js';
 import { getUpcomingProjects } from '../models/projects.js';
 import { getProjectDetails } from '../models/projects.js';
 import { getCategoriesByProjectId } from '../models/categories.js';
+import { createProject } from '../models/projects.js';
+import {getAllOrganizations} from '../models/organizations.js';
+import { body, validationResult } from 'express-validator';
+
+const projectValidation = [
+    body('title')
+        .trim()
+        .notEmpty()
+        .withMessage('Project title is required')
+        .isLength({ min: 3, max: 200 })
+        .withMessage('Project title must be between 3 and 200 characters'),
+    body('description')
+        .trim()
+        .notEmpty()
+        .withMessage('Project description is required')
+        .isLength({ max: 1000 })
+        .withMessage('Project description cannot exceed 1000 characters'),
+    body('location')
+        .trim()
+        .notEmpty()
+        .withMessage('Project location is required')
+        .isLength({max: 200 })
+        .withMessage('Project location must be between 3 and 200 characters'),
+    body('date')
+        .notEmpty()
+        .withMessage('Project date is required')
+        .isISO8601()
+        .withMessage('Please provide a valid date'),
+    body('organizationId')
+        .notEmpty()
+        .isInt()
+        .withMessage('Organization is required')
+];
 
 const NUMBER_OF_UPCOMING_PROJECTS = 5;
 // Define any controller functions
@@ -22,5 +55,26 @@ const showProjectDetailsPage = async (req, res) => {
     res.render('project', { title, project, categories });
 };
 
+const showNewProjectForm = async (req, res) => {
+    const organizations = await getAllOrganizations();
+    const title = 'Create New Project';
+
+    res.render('new-project', { title, organizations });
+};
+
+const processNewProjectForm = async (req, res) => {
+    const { title, description, location, date, organizationId } = req.body;
+     const results = validationResult(req);
+    if (!results.isEmpty()) {
+        results.array().forEach((error) => {
+            req.flash('error', error.msg);
+        });
+        return res.redirect('/new-project');
+    }
+    const newProjectId = await createProject(title, description, location, date, organizationId);
+    req.flash('success', 'Project created successfully!');
+    res.redirect('/projects');
+};
+
 // Export any controller functions
-export { showProjectsPage, showProjectDetailsPage };
+export { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm , projectValidation};

@@ -67,4 +67,16 @@ const getProjectsByOrganizationId = async (organization_id) => {
     return result.rows; 
 }
 
-export { getAllProjects, getUpcomingProjects, getProjectDetails, getProjectsByOrganizationId }
+const createProject = async (title, description, location, date, organizationId) => { 
+    const query = `
+        INSERT INTO public.project (project_title, project_description, project_location, project_date, organization_id)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING project_id;
+    `;
+    const queryParams = [title, description, location, date, organizationId];
+    const result = await db.query(query, queryParams);
+
+    return result.rows[0].project_id; 
+}
+
+export { getAllProjects, getUpcomingProjects, getProjectDetails, getProjectsByOrganizationId, createProject }
