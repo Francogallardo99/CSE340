@@ -23,10 +23,10 @@ router.get('/new-project', showNewProjectForm);
 router.get('/assign-categories/:id', showAssignCategoriesForm);
 router.get('/edit-project/:id', showEditProjectForm);
 router.post('/new-organization', organizationValidation, processNewOrganizationForm);
-router.post('/edit-organization/:id', organizationValidation, processEditOrganizationForm, organizationValidation);
-router.post('/assign-categories/:id', categoryValidation, processAssignCategoriesForm);
+router.post('/edit-organization/:id', organizationValidation, processEditOrganizationForm);
+router.post('/assign-categories/:id', processAssignCategoriesForm);
 router.post('/new-project', projectValidation, processNewProjectForm);
-router.post('/edit-project/:id', projectValidation, processEditProjectForm, projectValidation);
+router.post('/edit-project/:id', projectValidation, processEditProjectForm);
 router.post('/new-category', categoryValidation, processNewCategoryForm);
 router.post('/edit-category/:id', categoryValidation, processEditCategoryForm);
 // error-handling routes

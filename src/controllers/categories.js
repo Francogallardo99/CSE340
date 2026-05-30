@@ -100,4 +100,4 @@ const showNewCategoryForm = async (req, res) => {
     res.render('new-category', { title });
 }
 
-export { showCategoriesPage, showCategoryDetailsPage, showAssignCategoriesForm , processAssignCategoriesForm , processNewCategoryForm , showEditCategoryForm , processEditCategoryForm, showNewCategoryForm};
+export { showCategoriesPage, showCategoryDetailsPage, showAssignCategoriesForm , processAssignCategoriesForm , processNewCategoryForm , showEditCategoryForm , processEditCategoryForm, showNewCategoryForm , categoryValidation};
