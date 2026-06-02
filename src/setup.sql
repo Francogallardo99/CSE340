@@ -6,7 +6,7 @@ name varchar(150) not null,
 description text not null,
 contact_email varchar(250) not null,
 logo_filename varchar(250) not null
-)
+);
 
 /* Insert sample organizations */
 
@@ -154,3 +154,29 @@ INSERT INTO project_category (project_id, category_id) VALUES
 (14, 1), (14, 3),
 -- Charity Fundraising Marathon
 (15, 3), (15, 4);
+
+/* Table: Roles */
+
+create table roles(
+role_id serial primary key,
+role_name varchar(50) unique not null,
+role_description text
+);
+
+/* Insert roles */
+
+INSERT INTO roles(role_name, role_description) VALUES
+('user' , 'Standard user with basic access'),
+('admin', 'Administrator with full system access');
+
+/* Table: Users */
+
+CREATE TABLE users(
+user_id SERIAL PRIMARY KEY,
+name VARCHAR(100) NOT NULL,
+email VARCHAR(100) UNIQUE NOT NULL,
+password_hash VARCHAR(255) NOT NULL,
+role_id  INTEGER REFERENCES roles(role_id),
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
