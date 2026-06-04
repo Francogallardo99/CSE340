@@ -1,4 +1,5 @@
 import db from './db.js';
+import bcrypt from 'bcrypt';
 const createUser = async (name, email, password_hash) => { 
     const default_role = 'user';
     const query = `
@@ -20,4 +21,31 @@ const createUser = async (name, email, password_hash) => {
     return result.rows[0].user_id; 
 }
 
-export { createUser };
+const findUserByEmail = async (email) => {
+    const query = 'SELECT * FROM users WHERE email = $1';
+    const result = await db.query(query, [email]);
+    if (result.rows.length === 0) {
+        return null; // User not found
+    }
+    return result.rows[0];
+}
+
+const verifyPassword = async (password, password_hash) => {
+    return await bcrypt.compare(password, password_hash);
+}
+
+const authenticateUser = async (email, password) => {
+    const user = await findUserByEmail(email);
+    if (!user) {
+        return null; 
+    }
+    const isPasswordValid = await verifyPassword(password, user.password_hash);
+    if (!isPasswordValid) {
+        return null; 
+    }
+    
+    delete user.password_hash;
+    return user; 
+}
+
+export { createUser, authenticateUser };
