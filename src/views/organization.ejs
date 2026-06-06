@@ -21,6 +21,9 @@
         </ul>
         <br>
         <a href="/projects">Back to Projects</a> | <a href="/organizations">View all Organizations</a> | 
+        <% if (user && user.role_name === 'admin') { %>
         <a href="/edit-organization/<%= organization.organization_id %>">Edit Organization</a>
+        <% } %>
+
     </main>
 <%- include('partials/footer') %>

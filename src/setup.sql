@@ -180,3 +180,6 @@ role_id  INTEGER REFERENCES roles(role_id),
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+/* Update user roles */
+    
+UPDATE users SET role_id = (SELECT role_id FROM roles WHERE role_name = 'admin') WHERE email = 'admin@example.com';
