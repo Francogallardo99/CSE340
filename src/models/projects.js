@@ -98,4 +98,16 @@ const updateProject = async (projectId, title, description, location, date, orga
     return result.rows[0];
 };
 
-export { getAllProjects, getUpcomingProjects, getProjectDetails, getProjectsByOrganizationId, createProject , updateProject }
+const getVolunteersByProject = async (projectId) => {
+    const query = `
+        SELECT u.name, u.email
+        FROM users u
+        JOIN project_volunteers pv ON u.user_id = pv.user_id -- ¡Aquí estaba el detalle!
+        WHERE pv.project_id = $1;
+    `;
+    const result = await db.query(query, [projectId]);
+
+    return result.rows;
+}
+
+export { getAllProjects, getUpcomingProjects, getProjectDetails, getProjectsByOrganizationId, createProject , updateProject, getVolunteersByProject }

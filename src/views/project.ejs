@@ -31,6 +31,15 @@
         <% } else { %>
             <a href="/login">Login to Volunteer</a>
         <% } %>
-
+        <h3>Volunteers</h3>
+        <% if (volunteers && volunteers.length > 0) { %> <ul>
+                <% volunteers.forEach(volunteer => { %>
+                    <li><%= volunteer.name %> (<%= volunteer.email %>)</li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>No volunteers yet.</p>
+        <% } %>
+        
     </main>
 <%- include('partials/footer') %>
