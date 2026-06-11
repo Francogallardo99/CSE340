@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
-import { createUser , authenticateUser , getAllUsers} from '../models/users.js';
-
+import { createUser , authenticateUser , getAllUsers , addVolunteer , removeVolunteer , getVolunteeredProjects , checkIfVolunteer} from '../models/users.js';
 const showUserRegistrationForm = (req, res) => {
     res.render('register', { title: 'Register' });
 };
@@ -54,12 +53,13 @@ const requireLogin = (req, res, next) => {
     next();
 };
 
-const showDashboard = (req, res) => {
+const showDashboard = async (req, res) => {
     const name = req.session.user.name;
     const email = req.session.user.email;
     const user = req.session.user; 
+    const volunteeredProjects = await getVolunteeredProjects(user.user_id);
 
-    res.render('dashboard', { title: 'Dashboard', name, email, user }); 
+    res.render('dashboard', { title: 'Dashboard', name, email, user, volunteeredProjects }); 
 };
 
 const requireRole = (role) => {
@@ -83,4 +83,34 @@ const showAllUsers = async (req, res) => {
     res.render('users', { title, users, user });
 }
 
-export { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard, requireRole, showAllUsers };
+const processVolunteer = async (req, res) => {
+    const user_id = req.session.user.user_id;
+    const project_id = req.params.id;   
+    
+    const isVolunteer = await checkIfVolunteer(user_id, project_id);
+    
+    if (isVolunteer) {
+        req.flash('error', 'You are already part of this project.');
+    } else {
+        await addVolunteer(user_id, project_id);
+        req.flash('success', 'You have been added to the volunteer list for this project.');
+    }
+    res.redirect(`/project/${project_id}`); 
+}
+
+const processUnvolunteer = async (req, res) => {
+    const user_id = req.session.user.user_id;
+    const project_id = req.params.id; 
+    
+    const isVolunteer = await checkIfVolunteer(user_id, project_id);
+    
+    if (!isVolunteer) {
+        req.flash('error', 'You are not part of this project.');
+    } else {
+        await removeVolunteer(user_id, project_id);
+        req.flash('success', 'You have been removed from the volunteer list for this project.');
+    }
+    res.redirect(`/project/${project_id}`); 
+}
+
+export { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard, requireRole, showAllUsers, processVolunteer, processUnvolunteer };

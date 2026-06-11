@@ -74,4 +74,49 @@ const getAllUsers = async () => {
     return result.rows;
 }
 
-export { createUser, authenticateUser, getAllUsers };
+const addVolunteer = async (user_id, project_id) => {
+    const query = `
+        INSERT INTO project_volunteers (user_id, project_id)
+        VALUES ($1, $2)
+        RETURNING *;
+    `;
+    const result = await db.query(query, [user_id, project_id]);
+    return result.rows[0];
+}
+
+const removeVolunteer = async (user_id, project_id) => {
+    const query = `
+        DELETE FROM project_volunteers
+        WHERE user_id = $1 AND project_id = $2
+        RETURNING *;
+    `;
+    const result = await db.query(query, [user_id, project_id]);
+    return result.rows[0];
+}
+
+const checkIfVolunteer = async (user_id, project_id) => {
+    const query = `
+        SELECT * FROM project_volunteers
+        WHERE user_id = $1 AND project_id = $2;
+    `;
+    const result = await db.query(query, [user_id, project_id]);
+    return result.rows.length > 0;
+}
+
+const getVolunteeredProjects = async (user_id) => {
+    const query = `
+        SELECT 
+            p.project_id, 
+            p.project_title, 
+            p.project_description, 
+            p.project_location, 
+            p.project_date
+        FROM project p
+        JOIN project_volunteers pv ON p.project_id = pv.project_id
+        WHERE pv.user_id = $1;
+    `;
+    const result = await db.query(query, [user_id]);
+    return result.rows;
+}
+
+export { createUser, authenticateUser, getAllUsers, addVolunteer, removeVolunteer, checkIfVolunteer, getVolunteeredProjects };

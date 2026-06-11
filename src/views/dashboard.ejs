@@ -11,6 +11,26 @@
         <a href="/users">Show All Users</a>    
     <% } %>
 
+    <h3>Volunteered Projects</h3>
+    <% if (volunteeredProjects.length > 0) { %>
+        <ul>
+            <% volunteeredProjects.forEach(project => { %>
+                <li>
+                    <h4><%= project.project_title %></h4> 
+                    <p><strong>Description:</strong> <%= project.project_description %></p>
+                    <p><strong>Location:</strong> <%= project.project_location %></p>
+                    <p><strong>Date:</strong> <%= project.project_date %></p>
+                    
+                    <form action="/project/<%= project.project_id %>/unvolunteer" method="POST" style="display:inline;">
+                        <button type="submit">Unvolunteer</button>
+                    </form>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>You are not volunteering for any projects.</p>
+    <% } %>
+
 </main>
 
 <%- include('partials/footer') %>

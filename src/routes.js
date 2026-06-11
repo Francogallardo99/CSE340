@@ -4,7 +4,7 @@ import { showOrganizationsPage, showOrganizationDetailsPage , showNewOrganizatio
 import { showProjectsPage, showProjectDetailsPage , showNewProjectForm, processNewProjectForm , projectValidation , showEditProjectForm, processEditProjectForm} from './controllers/projects.js';
 import { showCategoriesPage, showCategoryDetailsPage , showAssignCategoriesForm, processAssignCategoriesForm , processNewCategoryForm, showEditCategoryForm , processEditCategoryForm, showNewCategoryForm, categoryValidation} from './controllers/categories.js';
 import { testErrorPage } from './controllers/errors.js';
-import { showUserRegistrationForm, processUserRegistrationForm , showLoginForm , processLoginForm , processLogout , requireLogin , showDashboard , requireRole , showAllUsers} from './controllers/users.js';
+import { showUserRegistrationForm, processUserRegistrationForm , showLoginForm , processLoginForm , processLogout , requireLogin , showDashboard , requireRole , showAllUsers , processUnvolunteer , processVolunteer} from './controllers/users.js';
 
 
 const router = express.Router();
@@ -52,6 +52,8 @@ router.post('/assign-categories/:id', requireRole('admin'), processAssignCategor
 
 // Users
 router.get('/users', requireRole('admin'), showAllUsers);
+router.post('/project/:id/volunteer', requireLogin, processVolunteer);
+router.post('/project/:id/unvolunteer', requireLogin, processUnvolunteer);
 
 // --- Error Testing Route ---
 router.get('/test-error', testErrorPage);

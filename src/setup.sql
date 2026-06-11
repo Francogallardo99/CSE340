@@ -183,3 +183,14 @@ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 /* Update user roles */
     
 UPDATE users SET role_id = (SELECT role_id FROM roles WHERE role_name = 'admin') WHERE email = 'admin@example.com';
+
+
+/* Table: Volunteers */
+
+CREATE TABLE project_volunteers(
+user_id INTEGER NOT NULL,
+project_id INTEGER NOT NULL,
+primary key (user_id, project_id),
+FOREIGN KEY (project_id) REFERENCES project(project_id),
+FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
